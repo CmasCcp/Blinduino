@@ -1,82 +1,82 @@
+<?php
+require 'vendor/autoload.php'; // Cargar Parsedown con Composer
+
+$Parsedown = new Parsedown();
+
+// Función para obtener archivos de todas las subcarpetas
+function obtenerArchivosPorTema($directory) {
+    $temas = [];
+    // Leer las carpetas dentro de docs
+    $carpetas = array_filter(glob($directory . '/*'), 'is_dir');
+    
+    foreach ($carpetas as $carpeta) {
+        $tema = basename($carpeta); // El nombre de la carpeta es el tema
+        $archivos = array_filter(glob($carpeta . '/*.md'), 'is_file');
+        
+        $temas[$tema] = $archivos; // Asocia los archivos al tema
+    }
+
+    return $temas;
+}
+
+// Obtener todos los archivos organizados por tema
+$temasConArchivos = obtenerArchivosPorTema(__DIR__ . '/docs');
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Documentación accesible para todos los usuarios">
-    <title>Documentación Accesible</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
+    <title>Documentación</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
-<body class="d-flex flex-column p-0">
-    <!-- Saltar al contenido principal -->
-    <div class="col-12 bg-black" style="height:200px;">
-        hakjshf
-        <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
-    </div>
+<body>
 
-    <div class="container-fluid col-12 p-0">
-        
-        <!-- Sidebar de navegación -->
-        <aside class="position-fixed vh-100 col-4 col-md-3 col-sm-12" aria-label="Navegación de la página">
-            <nav class="w-100">
-                <ul>
-                    <li><a href="#item1" aria-current="page">ITEM 1</a></li>
-                    <li><a href="#item2">ITEM 2</a></li>
-                    <li><a href="#item3">ITEM 3</a></li>
-                    <li><a href="#item4">ITEM 4</a></li>
-                    <li><a href="#item5">ITEM 5</a></li>
-                    <li><a href="#item6">ITEM 6</a></li>
-                </ul>
-            </nav>
-        </aside>
-        
-        <!-- Contenido principal -->
-        <div class="col-md-9 p-0 ml-auto">
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                    <a href="#" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                        <span class="fs-3 font-bold d-none d-sm-inline">Blinduino</span>
+                    </a>
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
 
-            <main id="col-8 col-md-9 col-sm-12 p-3">
-                <section id="item1" tabindex="0">
-                    <h1>ITEM 1</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    <img src="image-placeholder.png" alt="Descripción de la imagen" />
-                </section>
-                
-                <section id="item2" tabindex="0">
-                    <h1>ITEM 2</h1>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                    <img src="image-placeholder.png" alt="Descripción de la imagen" />
-                </section>
-                <section id="item1" tabindex="0">
-                    <h1>ITEM 1</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    <img src="image-placeholder.png" alt="Descripción de la imagen" />
-                </section>
-                
-                <section id="item2" tabindex="0">
-                    <h1>ITEM 2</h1>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                    <img src="image-placeholder.png" alt="Descripción de la imagen" />
-                </section>
-                <section id="item1" tabindex="0">
-                    <h1>ITEM 1</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    <img src="image-placeholder.png" alt="Descripción de la imagen" />
-                </section>
-                
-                <section id="item2" tabindex="0">
-                    <h1>ITEM 2</h1>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                    <img src="image-placeholder.png" alt="Descripción de la imagen" />
-                </section>
-                
-                <!-- Más secciones según sea necesario... -->
-            </main>
-            <footer>
-                <p>© 2024 Documentación Accesible. Todos los derechos reservados.</p>
-            </footer>
+                        <?php
+                            foreach ($temasConArchivos as $tema => $archivos) {
+                                echo "<span class='ms-1 d-none d-sm-inline'>$tema</span>";
+
+                                foreach ($archivos as $archivo) {
+                                    $archivoNombre = basename($archivo, '.md');
+                                    $archivoURL = urlencode("$tema/$archivoNombre");
+                                    echo "<li class='w-100 '><a href='?page=$archivoURL' class='nav-link text-white pl-2 px-0'>$archivoNombre</a></li>";
+                                }
+                            }
+                        ?>
+                    </ul>
+                </div>
+            </div>
+            <div class="col py-3">
+            <?php
+        // Verificar si se ha solicitado una página específica
+        if (isset($_GET['page'])) {
+            $rutaArchivo = __DIR__ . '/docs/' . $_GET['page'] . '.md';
+
+            if (file_exists($rutaArchivo)) {
+                $markdownContent = file_get_contents($rutaArchivo);
+                echo "<div class='container mt-5'>";
+                echo $Parsedown->text($markdownContent); // Convertir Markdown a HTML
+                echo "</div>";
+            } else {
+                echo "<div class='container mt-5'><h2>Archivo no encontrado</h2></div>";
+            }
+        }
+        ?>
+            </div>
         </div>
     </div>
-        
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
