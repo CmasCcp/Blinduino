@@ -70,6 +70,11 @@ $temasConArchivos = obtenerArchivosPorTema(__DIR__ . '/docs');
             } else {
                 echo "<div class='container mt-5'><h2>Archivo no encontrado</h2></div>";
             }
+        }else{
+            $markdownContent = file_get_contents(__DIR__ . '/docs/Tema 1/intro.md');
+            echo "<div class='container mt-5'>";
+            echo $Parsedown->text($markdownContent); // Convertir Markdown a HTML
+            echo "</div>";
         }
         ?>
             </div>
