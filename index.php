@@ -29,19 +29,21 @@ $temasConArchivos = obtenerArchivosPorTema(__DIR__ . '/docs');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentación</title>
+    <link rel="stylesheet" href="./pages/styles.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 
-    <div class="container-fluid">
+    <div class="container-fluid p-0">
+        <?php require("./components/navbar.php") ?>
         <div class="row flex-nowrap">
             <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
                 <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                    <a href="#" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <a href="?" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                         <span class="fs-3 font-bold d-none d-sm-inline">Blinduino</span>
                     </a>
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-
+                        
                         <?php
                             foreach ($temasConArchivos as $tema => $archivos) {
                                 echo "<span class='ms-1 d-none d-sm-inline'>$tema</span>";
@@ -71,10 +73,11 @@ $temasConArchivos = obtenerArchivosPorTema(__DIR__ . '/docs');
                 echo "<div class='container mt-5'><h2>Archivo no encontrado</h2></div>";
             }
         }else{
-            $markdownContent = file_get_contents(__DIR__ . '/docs/Tema 1/intro.md');
-            echo "<div class='container mt-5'>";
-            echo $Parsedown->text($markdownContent); // Convertir Markdown a HTML
-            echo "</div>";
+            require("./pages/introduction.php");
+            //$markdownContent = file_get_contents(__DIR__ . '/docs/Tema 1/intro.md');
+            //echo "<div class='container mt-5'>";
+            //echo $Parsedown->text($markdownContent); // Convertir Markdown a HTML
+            //echo "</div>";
         }
         ?>
             </div>
